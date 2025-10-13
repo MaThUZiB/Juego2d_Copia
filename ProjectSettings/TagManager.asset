@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - manzana
+  - escalera
+  - boss
+  - Boss
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Suelo
+  - Water
+  - UI
+  - Player
+  - Enemy
+  - Bullet
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Atras -
+    uniqueID: 932876149
+    locked: 0
+  - name: Atras
+    uniqueID: 2837144341
+    locked: 0
+  - name: Atras +
+    uniqueID: 2869710893
+    locked: 0
+  - name: Atras ++
+    uniqueID: 1152833637
+    locked: 0
+  - name: Atras +++
+    uniqueID: 1881416155
+    locked: 0
+  - name: Adelante
+    uniqueID: 3649226705
+    locked: 0
+  - name: Adelante +
+    uniqueID: 4016458599
+    locked: 0
+  m_RenderingLayers:
+  - Default
