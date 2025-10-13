@@ -19,9 +19,9 @@ public class AtaqueBoss : MonoBehaviour
             Vida vidaJugador = collision.GetComponent<Vida>();
             if (vidaJugador != null && !vidaJugador.invencible)
             {
-                vidaJugador.perderVida();            // Quita 1 vida
-                vidaJugador.ActivarInvencibilidad(); // Activa invencibilidad temporal
-                yaGolpeo = true;                     // Solo daño una vez por ataque
+                vidaJugador.perderVida();            
+                vidaJugador.ActivarInvencibilidad(); 
+                yaGolpeo = true;                     
             }
         }
     }

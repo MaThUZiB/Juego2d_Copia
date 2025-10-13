@@ -2,17 +2,30 @@ using UnityEngine;
 
 public class escotillaController : MonoBehaviour
 {
+    [Header("Configuración de apertura")]
     public int cantidadNecesaria = 10;
-    public Vector3 direccionMovimiento = new Vector3(1f, 0f, 0f); // mover a la derecha
-    public float distancia = 2f; // cuánto se mueve
-    public float duracion = 1f; // tiempo en segundos
+    public Vector3 direccionMovimiento = new Vector3(1f, 0f, 0f); 
+    public float distancia = 2f; 
+    public float duracion = 1f; 
+
+    [Header("Audio")]
+    public AudioClip sonidoApertura;
+    [Range(0f, 1f)] public float volumen = 0.7f;
 
     private bool activada = false;
     private Vector3 posicionInicial;
+    private AudioSource audioSource;
 
     void Start()
     {
         posicionInicial = transform.position;
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.playOnAwake = false;
     }
 
     void Update()
@@ -26,6 +39,11 @@ public class escotillaController : MonoBehaviour
     void AbrirEscotilla()
     {
         activada = true;
+        if (sonidoApertura != null)
+        {
+            audioSource.PlayOneShot(sonidoApertura, volumen);
+        }
+
         StartCoroutine(MoverEscotilla());
     }
 
@@ -33,8 +51,6 @@ public class escotillaController : MonoBehaviour
     {
         Vector3 destino = posicionInicial + direccionMovimiento.normalized * distancia;
         float tiempo = 0f;
-
-        // Desactivar el collider antes de mover si quieres que el jugador pueda pasar mientras se mueve
         BoxCollider2D col = GetComponent<BoxCollider2D>();
         if (col != null) col.isTrigger = true;
 

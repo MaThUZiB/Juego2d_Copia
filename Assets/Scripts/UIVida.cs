@@ -8,8 +8,6 @@ public class UIVida : MonoBehaviour
     public Sprite corazonLleno;
     public Sprite corazonVacio;
 
-
-    // Update is called once per frame
     void Update()
     {
         ActualizarCorazones();        

@@ -23,7 +23,7 @@ public class boss : MonoBehaviour
     private bool puedeAtacar = true;
 
     [Header("Hitbox Ataque")]
-    public GameObject hitBoxAtaque; // Asignar el HitBoxAtaque en el Inspector
+    public GameObject hitBoxAtaque; 
 
     private void Start()
     {
@@ -66,16 +66,15 @@ public class boss : MonoBehaviour
         puedeAtacar = false;
         animator.SetBool("Caminando", false);
 
-        // Elegir Ataque1 o Ataque2 aleatoriamente
+        
         int tipoAtaque = Random.Range(0, 2);
         if (tipoAtaque == 0) animator.SetTrigger("Ataque1");
         else animator.SetTrigger("Ataque2");
 
-        // Espera duración de ataque para no interrumpir animación
+        
         yield return new WaitForSeconds(tiempoEntreAtaques);
         puedeAtacar = true;
 
-        // Reset triggers para evitar quedarse pegado
         animator.ResetTrigger("Ataque1");
         animator.ResetTrigger("Ataque2");
     }
@@ -115,7 +114,6 @@ public class boss : MonoBehaviour
         sr.color = Color.white;
     }
 
-    // Llamadas desde Animation Events
     public void ActivarHitBox()
     {
         if(hitBoxAtaque != null) hitBoxAtaque.SetActive(true);

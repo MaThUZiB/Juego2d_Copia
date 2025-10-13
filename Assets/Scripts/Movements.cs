@@ -25,6 +25,14 @@ public class MovimientoPersonaje : MonoBehaviour
     public GameObject startingWeapon;
     private GameObject currentWeapon;
 
+    [Header("Audio")]
+    public AudioSource pasosAudio;      
+    public AudioSource saltoAudioSource; 
+    public AudioClip saltoClip;
+    public float volumenSalto = 0.7f;
+    public float volumenPasos = 0.5f;
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -34,42 +42,43 @@ public class MovimientoPersonaje : MonoBehaviour
 
     private void Start()
     {
-        // Equipar arma desde el inicio
         if (startingWeapon != null)
             EquipWeapon(startingWeapon);
     }
 
     private void FixedUpdate()
     {
-        // Movimiento horizontal
         rb.linearVelocity = new Vector2(moveInput.x * velocidad, rb.linearVelocity.y);
         animator.SetFloat("camina", Mathf.Abs(moveInput.x * velocidad));
         animator.SetBool("enSuelo", enSuelo);
 
+        bool puedeCaminar = enSuelo && !escalando && Mathf.Abs(moveInput.x) > 0.1f;
+        if (puedeCaminar)
+        {
+            if (!pasosAudio.isPlaying)
+                pasosAudio.Play();
+        }
+        else
+        {
+            if (pasosAudio.isPlaying)
+                pasosAudio.Stop();
+        }
+
         if(moveInput.x != 0)
         {
             float direccion = Mathf.Sign(moveInput.x);
-
-            // Flip del sprite del personaje
             spritePersonaje.flipX = direccion < 0;
-
-            // Flip del arma
             Vector3 armaScale = currentWeapon.transform.localScale;
-            armaScale.x = Mathf.Abs(armaScale.x) * direccion; // mantiene posición relativa
+            armaScale.x = Mathf.Abs(armaScale.x) * direccion; 
             currentWeapon.transform.localScale = armaScale;
-
-            // Opcional: ajustar rotación si el arma dispara con angulo
             currentWeapon.transform.localRotation = Quaternion.Euler(0, 0, 0); 
         }
-        // Escalera
         if (escalando)
         {
             rb.gravityScale = 0f;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, movimientoVertical * velocidadSubida);
         }
         else rb.gravityScale = 1f;
-
-        // Suelo
         enSuelo = Physics2D.OverlapCircle(chequeoSuelo.position, radioChequeo, capaSuelo);
     }
 
@@ -99,7 +108,12 @@ public class MovimientoPersonaje : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.performed && enSuelo)
+        {
             rb.AddForce(Vector2.up * fuerzaSalto, ForceMode2D.Impulse);
+
+            if (saltoClip != null && saltoAudioSource != null)
+                saltoAudioSource.PlayOneShot(saltoClip, volumenSalto);
+        }
     }
 
     public void OnAttack(InputAction.CallbackContext context)

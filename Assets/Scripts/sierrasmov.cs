@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class SierraMovimiento : MonoBehaviour
 {
-    public float velocidad = 2f;       // Velocidad del movimiento
-    public float distancia = 3f;       // Qué tan alto/bajo se moverá
-    public bool empiezaHaciaArriba = true; // Cambia esto en el Inspector para invertir el inicio
-
+    public float velocidad = 2f;       
+    public float distancia = 3f;       
+    public bool empiezaHaciaArriba = true; 
     private Vector3 posicionInicial;
-    private int direccion; // 1 = arriba, -1 = abajo
+    private int direccion; 
 
     void Start()
     {
@@ -17,10 +16,7 @@ public class SierraMovimiento : MonoBehaviour
 
     void Update()
     {
-        // Movimiento solo en Y
         transform.Translate(Vector2.up * direccion * velocidad * Time.deltaTime);
-
-        // Si la sierra alcanza el límite superior o inferior, cambia de dirección
         if (transform.position.y >= posicionInicial.y + distancia)
         {
             direccion = -1;
