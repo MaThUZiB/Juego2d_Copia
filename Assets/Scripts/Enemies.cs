@@ -2,14 +2,15 @@ using UnityEngine;
 
 public class Enemies : MonoBehaviour
 {
-    [Header("Enemigo")]
+    [Header("Configuración del Enemigo")]
     public float velocidad = 3f;          // Velocidad de movimiento
     public float distanciaAtaque = 1.5f;  // Distancia mínima para atacar
-    public int daño = 10;                 // Daño al jugador
+    public int daño = 1;                  // Cuánta vida quita al jugador
+    public float tiempoEntreAtaques = 1f; // Tiempo de espera entre ataques
 
     private Transform jugador;
     private Rigidbody2D rb;
-    private bool atacando = false;
+    private bool puedeAtacar = true;
 
     void Awake()
     {
@@ -18,12 +19,12 @@ public class Enemies : MonoBehaviour
 
     void Start()
     {
-        // Busca al jugador en la escena (asegúrate que tenga tag "Player")
+        // Busca al jugador (asegúrate que tenga el tag "Player")
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
             jugador = playerObj.transform;
         else
-            Debug.LogError("No se encontró un objeto con tag 'Player'");
+            Debug.LogError("⚠️ No se encontró un objeto con tag 'Player'");
     }
 
     void FixedUpdate()
@@ -38,28 +39,48 @@ public class Enemies : MonoBehaviour
             // Moverse hacia el jugador
             Vector2 direccion = (jugador.position - transform.position).normalized;
             rb.linearVelocity = direccion * velocidad;
-            atacando = false;
         }
         else
         {
-            // Detener movimiento y atacar
+            // Detener movimiento
             rb.linearVelocity = Vector2.zero;
-            if (!atacando)
+
+            // Intentar atacar si se puede
+            if (puedeAtacar)
             {
-                atacando = true;
-                Atacar();
+                StartCoroutine(Atacar());
             }
         }
     }
 
-    void Atacar()
+    private System.Collections.IEnumerator Atacar()
     {
-        // Aquí puedes llamar a un método del jugador para quitarle vida
-        Debug.Log("¡Atacando al jugador! Daño: " + daño);
+        puedeAtacar = false;
 
-        // Si tienes un script de jugador con un método TakeDamage(int dmg)
-        // jugador.GetComponent<MovimientoPersonaje>().TakeDamage(daño);
+        if (jugador != null)
+        {
+            Vida vidaJugador = jugador.GetComponent<Vida>();
+            if (vidaJugador != null && !vidaJugador.invencible)
+            {
+                vidaJugador.perderVida();
+            }
+        }
 
-        // Ejemplo simple: solo mensaje por ahora
+        // Espera un tiempo antes de volver a atacar
+        yield return new WaitForSeconds(tiempoEntreAtaques);
+        puedeAtacar = true;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Si quieres que también cause daño al chocar físicamente
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Vida vidaJugador = collision.gameObject.GetComponent<Vida>();
+            if (vidaJugador != null && !vidaJugador.invencible)
+            {
+                vidaJugador.perderVida();
+            }
+        }
     }
 }
