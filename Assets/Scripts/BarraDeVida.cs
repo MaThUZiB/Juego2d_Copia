@@ -4,16 +4,49 @@ using UnityEngine.UI;
 public class BarraDeVida : MonoBehaviour
 {
     [SerializeField] private Image barraRelleno;
+    [SerializeField] private Vida jugador;
     private float vidaMaxima;
 
-    public void InicializarBarraDeVida(float vida)
+    void Start()
     {
-        vidaMaxima = vida;
-        barraRelleno.fillAmount = 1f; // llena la barra completamente
+        if (jugador == null)
+            jugador = Object.FindAnyObjectByType<Vida>();
+
+        if (jugador != null)
+            vidaMaxima = jugador.maxVida;
+
+        ActualizarBarra();
     }
 
-    public void CambiarVidaActual(float vidaActual)
+    void Update()
     {
-        barraRelleno.fillAmount = vidaActual / vidaMaxima;
+        ActualizarBarra();
+    }
+
+    public void ActualizarBarra()
+    {
+        if (jugador == null) return;
+
+        float vidaActual = jugador.vidaActual;
+        barraRelleno.fillAmount = Mathf.Clamp01((float)vidaActual / vidaMaxima);
+    }
+
+    // 🔹 Compatibilidad con boss.cs
+    public void InicializarBarraDeVida(float valorInicial)
+    {
+        if (jugador != null)
+        {
+            jugador.vidaActual = Mathf.RoundToInt(valorInicial);
+            ActualizarBarra();
+        }
+    }
+
+    public void CambiarVidaActual(float nuevaVida)
+    {
+        if (jugador != null)
+        {
+            jugador.vidaActual = Mathf.RoundToInt(nuevaVida);
+            ActualizarBarra();
+        }
     }
 }

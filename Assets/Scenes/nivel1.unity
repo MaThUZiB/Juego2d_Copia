@@ -13063,6 +13063,7 @@ GameObject:
   - component: {fileID: 721775516}
   - component: {fileID: 721775515}
   - component: {fileID: 721775514}
+  - component: {fileID: 721775517}
   m_Layer: 0
   m_Name: mainCamera
   m_TagString: Untagged
@@ -13188,6 +13189,19 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &721775517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721775512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93940a45a47849140b36776c05010ab3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
+  positionPlayer: {fileID: 477299423}
 --- !u!1 &801542357
 GameObject:
   m_ObjectHideFlags: 0
